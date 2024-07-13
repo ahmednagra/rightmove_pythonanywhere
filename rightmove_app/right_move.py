@@ -1,35 +1,33 @@
+import os
 import re
 import ssl
+import json
 from io import BytesIO
+from collections import OrderedDict
+
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.lib.colors import HexColor
+from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import BaseDocTemplate
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Paragraph, Image, Table, TableStyle, PageBreak, PageTemplate, Frame, Spacer
 
 import requests
+from slugify import slugify
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-import json
-import os
-from collections import OrderedDict
-from datetime import datetime
-
-from reportlab.lib.colors import HexColor
-from reportlab.lib.enums import TA_CENTER
-from scrapy import Spider, Request, signals, Selector
-
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import inch
-from reportlab.platypus import Paragraph, Image, Table, TableStyle, PageBreak, PageTemplate, Frame, Spacer
-from reportlab.platypus import BaseDocTemplate
-from slugify import slugify
 
 styles = getSampleStyleSheet()
 custom_style_title = ParagraphStyle('CustomStyleTitle', parent=styles['Heading1'], fontSize=14, spaceAfter=0)
-custom_style_content = ParagraphStyle('CustomStyleContent', parent=styles['Normal'], fontSize=10, leading=12, spaceAfter=3, fontName='Helvetica')
-doc = None
 
 # Custom styles Header & Title in Center
 custom_style_title_center = ParagraphStyle('CustomStyleTitleCenter', parent=styles['Heading1'], fontSize=14, spaceAfter=0, alignment=TA_CENTER)
+custom_style_content = ParagraphStyle('CustomStyleContent', parent=styles['Normal'], fontSize=10, leading=12, spaceAfter=3, fontName='Helvetica')
+doc = None
 
 
 # Function to get value by heading
